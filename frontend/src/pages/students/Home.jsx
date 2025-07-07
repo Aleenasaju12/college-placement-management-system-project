@@ -1,11 +1,11 @@
-import React from 'react';
-import NoticeBox from '../../components/NoticeBox';
-import NotificationBox from '../../components/Students/NotificationBox';
+import React from "react";
+import NoticeBox from "../../components/NoticeBox";
+import NotificationBox from "../../components/Students/NotificationBox";
 
-// student 
+// student
 function Home() {
   // Set the page title
-  document.title = 'CPMS | Student Dashboard';
+  document.title = "VJCET | Student Dashboard";
 
   return (
     <>
@@ -17,4 +17,4 @@ function Home() {
   );
 }
 
-export default Home
+export default Home;

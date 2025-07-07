@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import Table from 'react-bootstrap/Table';
-import axios from 'axios';
-import Placeholder from 'react-bootstrap/Placeholder';
-import { useLocation, useNavigate } from 'react-router-dom';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Tooltip from 'react-bootstrap/Tooltip';
-import ModalBox from './Modal';
-import Toast from './Toast';
-import { BASE_URL } from '../config/backend_url';
-import TablePlaceholder from './TablePlaceholder';
+import React, { useState, useEffect } from "react";
+import Table from "react-bootstrap/Table";
+import axios from "axios";
+import Placeholder from "react-bootstrap/Placeholder";
+import { useLocation, useNavigate } from "react-router-dom";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
+import ModalBox from "./Modal";
+import Toast from "./Toast";
+import { BASE_URL } from "../config/backend_url";
+import TablePlaceholder from "./TablePlaceholder";
 
 function AddInternship() {
-  document.title = 'CPMS | My Internships';
+  document.title = "VJCET | My Internships";
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -20,32 +20,33 @@ function AddInternship() {
 
   // useState for toast display
   const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState('');
+  const [toastMessage, setToastMessage] = useState("");
 
   // useState for Modal display
   const [showModal, setShowModal] = useState(false);
   const [modalBody, setModalBody] = useState({});
-  const [dataToParasModal, setDataToParasModal] = useState('');
+  const [dataToParasModal, setDataToParasModal] = useState("");
 
   // useState for load data
   const [currentUser, setCurrentUser] = useState({});
 
   // checking for authentication
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    axios.get(`${BASE_URL}/user/detail`, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    })
-      .then(res => {
+    const token = localStorage.getItem("token");
+    axios
+      .get(`${BASE_URL}/user/detail`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
         setCurrentUser({
           id: res.data.id,
           email: res.data.email,
           role: res.data.role,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         console.log("AddUserTable.jsx => ", err);
         setToastMessage(err);
         setShowToast(true);
@@ -58,11 +59,14 @@ function AddInternship() {
   const fetchInternships = async () => {
     try {
       if (!currentUser?.id) return;
-      const response = await axios.get(`${BASE_URL}/student/internship?studentId=${currentUser?.id}`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      const response = await axios.get(
+        `${BASE_URL}/student/internship?studentId=${currentUser?.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         }
-      });
+      );
       setInternships(response.data.internships);
       // console.log(response.data);
       if (response?.data?.msg) {
@@ -77,7 +81,7 @@ function AddInternship() {
         setShowToast(true);
       }
     }
-  }
+  };
 
   useEffect(() => {
     fetchInternships();
@@ -89,15 +93,19 @@ function AddInternship() {
       cmpName: cmpName,
     });
     setShowModal(true);
-  }
+  };
 
   const confirmDelete = async (internshipId) => {
     try {
-      const response = await axios.post(`${BASE_URL}/student/delete-internship`, { internshipId, studentId: currentUser.id }, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      const response = await axios.post(
+        `${BASE_URL}/student/delete-internship`,
+        { internshipId, studentId: currentUser.id },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         }
-      });
+      );
 
       setShowModal(false);
       fetchInternships();
@@ -113,8 +121,7 @@ function AddInternship() {
       }
       console.log("Error deleting job ", error);
     }
-  }
-
+  };
 
   const renderTooltipEditInternship = (props) => (
     <Tooltip id="button-tooltip" {...props}>
@@ -130,18 +137,19 @@ function AddInternship() {
 
   const closeModal = () => setShowModal(false);
 
-
-  const { showToastPass, toastMessagePass } = location.state || { showToastPass: false, toastMessagePass: '' };
+  const { showToastPass, toastMessagePass } = location.state || {
+    showToastPass: false,
+    toastMessagePass: "",
+  };
 
   useEffect(() => {
     if (showToastPass) {
       setToastMessage(toastMessagePass);
       setShowToast(showToastPass);
       // Clear the state after the toast is shown
-      navigate('.', { replace: true, state: {} });
+      navigate(".", { replace: true, state: {} });
     }
   }, []);
-
 
   return (
     <>
@@ -155,116 +163,139 @@ function AddInternship() {
           position="bottom-end"
         />
 
-        <div className=''>
-          {
-            loading ? (
-              // fake table loading animation 
-              <TablePlaceholder />
-            ) : (
-              <Table striped bordered hover className='bg-white my-6 rounded-lg shadow w-full text-base max-lg:text-sm max-md:my-3'>
-                <thead>
-                  <tr>
-                    <th style={{ width: '6%' }}>Sr. No.</th>
-                    <th style={{ width: '16%' }}><b>Company Name</b></th>
-                    <th style={{ width: '13%' }}>Company Website</th>
-                    <th style={{ width: '14%' }}>Internship Start Date</th>
-                    <th style={{ width: '14%' }}>Internship End Date</th>
-                    <th style={{ width: '13%' }}>Internship Duration</th>
-                    <th style={{ width: '11%' }}>Monthly Stipend</th>
-                    <th style={{ width: '13%' }}>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {internships?.length > 0 ? (
-                    internships?.map((internship, index) => (
-                      <tr key={internship?._id}>
-                        <td>{index + 1}</td>
-                        <td>
-                          <b>
-                            {internship?.companyName || '-'}
-                          </b>
-                        </td>
-                        <td>
-                          {
-                            internship?.companyWebsite ? (
-                              <a href={internship?.companyWebsite} target='_blanck' className='no-underline text-blue-500 hover:text-blue-700'>
-                                {internship?.companyWebsite}
-                              </a>
-                            ) : '-'
-                          }
-                        </td>
-                        <td>
-                          {new Date(internship?.startDate).toLocaleDateString('en-IN') || '-'}
-                        </td>
-                        <td>
-                          {new Date(internship?.endDate).toLocaleDateString('en-IN') || '-'}
-                        </td>
-                        <td>
-                          {internship?.internshipDuration ? internship?.internshipDuration + " days" : '-'}
-                        </td>
-                        <td>
-                          {internship?.monthlyStipend ? "Rs. " + internship?.monthlyStipend : '-'}
-                        </td>
-                        <td>
-                          {/* for hover label effect  */}
-                          <div className="flex justify-around items-center max-lg:flex-col max-lg:gap-1">
-                            <div className="px-0.5">
-                              {/* edit internship  */}
-                              <OverlayTrigger
-                                placement="top"
-                                delay={{ show: 250, hide: 400 }}
-                                overlay={renderTooltipEditInternship}
-                              >
-                                <i
-                                  className="fa-regular fa-pen-to-square text-2xl cursor-pointer transition-colors duration-200 ease-in-out hover:text-blue-500"
-                                  onClick={() => navigate(`../student/add-internship/${internship._id}`)}
-                                  onMouseEnter={(e) => {
-                                    e.target.classList.add('fa-solid');
-                                    e.target.classList.remove('fa-regular');
-                                  }}
-                                  onMouseLeave={(e) => {
-                                    e.target.classList.add('fa-regular');
-                                    e.target.classList.remove('fa-solid');
-                                  }}
-                                />
-                              </OverlayTrigger>
-                            </div>
-                            <div className="px-0.5">
-                              {/* delete internship  */}
-                              <OverlayTrigger
-                                placement="top"
-                                delay={{ show: 250, hide: 400 }}
-                                overlay={renderTooltipDeleteInternship}
-                              >
-                                <i
-                                  className="fa-regular fa-trash-can text-2xl cursor-pointer transition-colors duration-200 ease-in-out hover:text-red-500"
-                                  onClick={() => handleDeleteInternship(internship?._id, internship?.companyName)}
-                                  onMouseEnter={(e) => {
-                                    e.target.classList.add('fa-solid');
-                                    e.target.classList.remove('fa-regular');
-                                  }}
-                                  onMouseLeave={(e) => {
-                                    e.target.classList.add('fa-regular');
-                                    e.target.classList.remove('fa-solid');
-                                  }}
-                                />
-                              </OverlayTrigger>
-                            </div>
+        <div className="">
+          {loading ? (
+            // fake table loading animation
+            <TablePlaceholder />
+          ) : (
+            <Table
+              striped
+              bordered
+              hover
+              className="bg-white my-6 rounded-lg shadow w-full text-base max-lg:text-sm max-md:my-3"
+            >
+              <thead>
+                <tr>
+                  <th style={{ width: "6%" }}>Sr. No.</th>
+                  <th style={{ width: "16%" }}>
+                    <b>Company Name</b>
+                  </th>
+                  <th style={{ width: "13%" }}>Company Website</th>
+                  <th style={{ width: "14%" }}>Internship Start Date</th>
+                  <th style={{ width: "14%" }}>Internship End Date</th>
+                  <th style={{ width: "13%" }}>Internship Duration</th>
+                  <th style={{ width: "11%" }}>Monthly Stipend</th>
+                  <th style={{ width: "13%" }}>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {internships?.length > 0 ? (
+                  internships?.map((internship, index) => (
+                    <tr key={internship?._id}>
+                      <td>{index + 1}</td>
+                      <td>
+                        <b>{internship?.companyName || "-"}</b>
+                      </td>
+                      <td>
+                        {internship?.companyWebsite ? (
+                          <a
+                            href={internship?.companyWebsite}
+                            target="_blanck"
+                            className="no-underline text-blue-500 hover:text-blue-700"
+                          >
+                            {internship?.companyWebsite}
+                          </a>
+                        ) : (
+                          "-"
+                        )}
+                      </td>
+                      <td>
+                        {new Date(internship?.startDate).toLocaleDateString(
+                          "en-IN"
+                        ) || "-"}
+                      </td>
+                      <td>
+                        {new Date(internship?.endDate).toLocaleDateString(
+                          "en-IN"
+                        ) || "-"}
+                      </td>
+                      <td>
+                        {internship?.internshipDuration
+                          ? internship?.internshipDuration + " days"
+                          : "-"}
+                      </td>
+                      <td>
+                        {internship?.monthlyStipend
+                          ? "Rs. " + internship?.monthlyStipend
+                          : "-"}
+                      </td>
+                      <td>
+                        {/* for hover label effect  */}
+                        <div className="flex justify-around items-center max-lg:flex-col max-lg:gap-1">
+                          <div className="px-0.5">
+                            {/* edit internship  */}
+                            <OverlayTrigger
+                              placement="top"
+                              delay={{ show: 250, hide: 400 }}
+                              overlay={renderTooltipEditInternship}
+                            >
+                              <i
+                                className="fa-regular fa-pen-to-square text-2xl cursor-pointer transition-colors duration-200 ease-in-out hover:text-blue-500"
+                                onClick={() =>
+                                  navigate(
+                                    `../student/add-internship/${internship._id}`
+                                  )
+                                }
+                                onMouseEnter={(e) => {
+                                  e.target.classList.add("fa-solid");
+                                  e.target.classList.remove("fa-regular");
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.target.classList.add("fa-regular");
+                                  e.target.classList.remove("fa-solid");
+                                }}
+                              />
+                            </OverlayTrigger>
                           </div>
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan="8">Internship Not Added Yet!</td>
+                          <div className="px-0.5">
+                            {/* delete internship  */}
+                            <OverlayTrigger
+                              placement="top"
+                              delay={{ show: 250, hide: 400 }}
+                              overlay={renderTooltipDeleteInternship}
+                            >
+                              <i
+                                className="fa-regular fa-trash-can text-2xl cursor-pointer transition-colors duration-200 ease-in-out hover:text-red-500"
+                                onClick={() =>
+                                  handleDeleteInternship(
+                                    internship?._id,
+                                    internship?.companyName
+                                  )
+                                }
+                                onMouseEnter={(e) => {
+                                  e.target.classList.add("fa-solid");
+                                  e.target.classList.remove("fa-regular");
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.target.classList.add("fa-regular");
+                                  e.target.classList.remove("fa-solid");
+                                }}
+                              />
+                            </OverlayTrigger>
+                          </div>
+                        </div>
+                      </td>
                     </tr>
-                  )}
-                </tbody>
-              </Table>
-            )
-          }
-        </div >
-
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="8">Internship Not Added Yet!</td>
+                  </tr>
+                )}
+              </tbody>
+            </Table>
+          )}
+        </div>
 
         {/* ModalBox Component for Delete Confirmation */}
         <ModalBox
@@ -277,7 +308,7 @@ function AddInternship() {
         />
       </>
     </>
-  )
+  );
 }
 
-export default AddInternship
+export default AddInternship;

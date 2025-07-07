@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import AddUserTable from './AddUserTable';
-import Toast from './Toast';
-import ModalBox from './Modal';
-import axios from 'axios';
-import { BASE_URL } from '../config/backend_url';
+import React, { useEffect, useState } from "react";
+import AddUserTable from "./AddUserTable";
+import Toast from "./Toast";
+import ModalBox from "./Modal";
+import axios from "axios";
+import { BASE_URL } from "../config/backend_url";
 
 function ApproveStudent() {
-  document.title = 'CPMS | Approve Students';
+  document.title = "VJCET | Approve Students";
 
   // student users store here
   const [users, setUsers] = useState([]);
@@ -14,28 +14,30 @@ function ApproveStudent() {
 
   // useState for toast display
   const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState('');
+  const [toastMessage, setToastMessage] = useState("");
 
   // useState for Modal display
   const [showModal, setShowModal] = useState(false);
   const [userEmailToProcess, setUserEmailToProcess] = useState(null);
-  const [modalBody, setModalBody] = useState('');
-  const [modalBtn, setModalBtn] = useState('');
+  const [modalBody, setModalBody] = useState("");
+  const [modalBtn, setModalBtn] = useState("");
 
   const fetchUserDetails = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/admin/student-users`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
-        }
+        },
       });
 
       if (response.data) {
         // checking isApprove is false
-        const filteredUsers = response.data.studentUsers.filter(element => !element.studentProfile.isApproved);
+        const filteredUsers = response.data.studentUsers.filter(
+          (element) => !element.studentProfile.isApproved
+        );
         setUsers(filteredUsers);
       } else {
-        console.warn('Response does not contain studentUsers:', response.data);
+        console.warn("Response does not contain studentUsers:", response.data);
       }
     } catch (error) {
       console.error("Error fetching user details", error);
@@ -58,12 +60,13 @@ function ApproveStudent() {
 
   const confirmDelete = async () => {
     try {
-      const response = await axios.post(`${BASE_URL}/admin/student-delete-user`,
+      const response = await axios.post(
+        `${BASE_URL}/admin/student-delete-user`,
         { email: userEmailToProcess },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
-          }
+          },
         }
       );
       setShowModal(false);
@@ -93,12 +96,13 @@ function ApproveStudent() {
 
   const confirmApproveStudent = async () => {
     try {
-      const response = await axios.post(`${BASE_URL}/admin/student-approve`,
+      const response = await axios.post(
+        `${BASE_URL}/admin/student-approve`,
         { email: userEmailToProcess }, // Use the state `userEmailToProcess` instead of `email`
         {
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem("token")}`
-          }
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         }
       );
       if (response.data) {
@@ -145,7 +149,9 @@ function ApproveStudent() {
         header={"Confirmation"}
         body={modalBody}
         btn={modalBtn}
-        confirmAction={modalBtn === "Delete" ? confirmDelete : confirmApproveStudent}
+        confirmAction={
+          modalBtn === "Delete" ? confirmDelete : confirmApproveStudent
+        }
       />
     </>
   );

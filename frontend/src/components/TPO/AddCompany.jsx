@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import Button from 'react-bootstrap/Button';
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
-import Form from 'react-bootstrap/Form';
-import Toast from '../Toast';
-import ModalBox from '../Modal';
-import { BASE_URL } from '../../config/backend_url';
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
+import Button from "react-bootstrap/Button";
+import FloatingLabel from "react-bootstrap/FloatingLabel";
+import Form from "react-bootstrap/Form";
+import Toast from "../Toast";
+import ModalBox from "../Modal";
+import { BASE_URL } from "../../config/backend_url";
 
 function AddCompany() {
-  document.title = 'CPMS | Add Company';
+  document.title = "VJCET | Add Company";
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const { companyId } = useParams();
 
   // useState for toast display
   const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState('');
+  const [toastMessage, setToastMessage] = useState("");
 
   // useState for Modal display
   const [showModal, setShowModal] = useState(false);
@@ -32,31 +32,35 @@ function AddCompany() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!data?.companyName || !data?.companyDescription || !data?.companyDifficulty || !data?.companyLocation || !data?.companyWebsite)
+    if (
+      !data?.companyName ||
+      !data?.companyDescription ||
+      !data?.companyDifficulty ||
+      !data?.companyLocation ||
+      !data?.companyWebsite
+    )
       return setError("All Fields Required!");
     setShowModal(true);
-  }
+  };
 
   const confirmSubmit = async () => {
     const url = companyId
       ? `${BASE_URL}/company/update-company?companyId=${companyId}`
       : `${BASE_URL}/company/add-company`;
     try {
-      const response = await axios.post(url, data,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          }
-        }
-      )
+      const response = await axios.post(url, data, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       if (response?.status === 201) {
         setShowModal(false);
         setToastMessage(response?.data?.msg);
         const dataToPass = {
           showToastPass: true,
-          toastMessagePass: response?.data?.msg
-        }
-        navigate('../tpo/companys', { state: dataToPass });
+          toastMessagePass: response?.data?.msg,
+        };
+        navigate("../tpo/companys", { state: dataToPass });
       }
     } catch (error) {
       console.log("AddCompany error while fetching => ", error);
@@ -64,37 +68,38 @@ function AddCompany() {
       setToastMessage(error?.response?.data?.msg);
       setShowToast(true);
     }
-  }
+  };
 
   const fetchCompanyData = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/company/company-data?companyId=${companyId}`);
+      const response = await axios.get(
+        `${BASE_URL}/company/company-data?companyId=${companyId}`
+      );
       setData(response.data.company);
     } catch (error) {
       console.log("AddCompany error while fetching => ", error);
     } finally {
       setLoading(false);
     }
-  }
+  };
 
-  useEffect(() => { if (companyId) fetchCompanyData() }, [companyId])
-
+  useEffect(() => {
+    if (companyId) fetchCompanyData();
+  }, [companyId]);
 
   useEffect(() => {
     if (!companyId) setLoading(false);
-  }, [])
-
+  }, []);
 
   const handleDataChange = (e) => {
-    setError('');
-    setData({ ...data, [e.target.name]: e.target.value })
-  }
-
+    setError("");
+    setData({ ...data, [e.target.name]: e.target.value });
+  };
 
   return (
     <>
       {/*  any message here  */}
-      < Toast
+      <Toast
         show={showToast}
         onClose={() => setShowToast(false)}
         message={toastMessage}
@@ -102,116 +107,132 @@ function AddCompany() {
         position="bottom-end"
       />
 
-      {
-        loading ? (
-          <div className="flex justify-center h-72 items-center">
-            <i className="fa-solid fa-spinner fa-spin text-3xl" />
-          </div>
-        ) : (
-          <>
-            <Form onSubmit={handleSubmit}>
-              <div className="my-8 text-base backdrop-blur-md bg-white/30 border border-white/20 rounded-lg shadow shadow-red-400 p-6 max-sm:text-sm max-sm:p-3">
-                <div className="flex flex-col gap-2">
-                  <div className="grid grid-cols-2 gap-2 max-sm:grid-cols-1">
-                    <FloatingLabel controlId="floatingCompanyName" label={
+      {loading ? (
+        <div className="flex justify-center h-72 items-center">
+          <i className="fa-solid fa-spinner fa-spin text-3xl" />
+        </div>
+      ) : (
+        <>
+          <Form onSubmit={handleSubmit}>
+            <div className="my-8 text-base backdrop-blur-md bg-white/30 border border-white/20 rounded-lg shadow shadow-red-400 p-6 max-sm:text-sm max-sm:p-3">
+              <div className="flex flex-col gap-2">
+                <div className="grid grid-cols-2 gap-2 max-sm:grid-cols-1">
+                  <FloatingLabel
+                    controlId="floatingCompanyName"
+                    label={
                       <>
-                        <span>Company Name <span className='text-red-500'>*</span></span>
+                        <span>
+                          Company Name <span className="text-red-500">*</span>
+                        </span>
                       </>
-                    }>
-                      <Form.Control
-                        type="text"
-                        placeholder="Company Name"
-                        name='companyName'
-                        value={data?.companyName || ''}
-                        onChange={handleDataChange}
-
-                      />
-                    </FloatingLabel>
-                    <FloatingLabel controlId="floatingCompanyLocation" label={
-                      <>
-                        <span>Company Location <span className='text-red-500'>*</span></span>
-                      </>
-                    }>
-                      <Form.Control
-                        type="text"
-                        placeholder="Company Location"
-                        name='companyLocation'
-                        value={data?.companyLocation || ''}
-                        onChange={handleDataChange}
-
-                      />
-                    </FloatingLabel>
-                  </div>
-                  <FloatingLabel controlId="floatingCompanyWebsite" label={
-                    <>
-                      <span>Company Website <span className='text-red-500'>*</span></span>
-                    </>
-                  }>
+                    }
+                  >
                     <Form.Control
-                      type="link"
-                      placeholder="Company Website"
-                      name='companyWebsite'
-                      value={data?.companyWebsite || ''}
+                      type="text"
+                      placeholder="Company Name"
+                      name="companyName"
+                      value={data?.companyName || ""}
                       onChange={handleDataChange}
-
                     />
                   </FloatingLabel>
-                  <FloatingLabel controlId="floatingSelectDifficulty" label={
-                    <>
-                      <span>Difficulty Level <span className='text-red-500'>*</span></span>
-                    </>
-                  }>
-                    <Form.Select
-                      aria-label="Floating label select difficulty"
-                      className='cursor-pointer'
-                      name='companyDifficulty'
-                      value={data?.companyDifficulty || ''}
-                      onChange={handleDataChange}
-
-                    >
-                      <option disabled value='' className='text-gray-400'>Enter Difficulty Level</option>
-                      <option value="Easy">Easy</option>
-                      <option value="Moderate">Moderate</option>
-                      <option value="Hard">Hard</option>
-                    </Form.Select>
-                  </FloatingLabel>
-                  <FloatingLabel controlId="floatingcompanyDescription" label={
-                    <>
-                      <span>Company Description <span className='text-red-500'>*</span></span>
-                    </>
-                  }>
+                  <FloatingLabel
+                    controlId="floatingCompanyLocation"
+                    label={
+                      <>
+                        <span>
+                          Company Location{" "}
+                          <span className="text-red-500">*</span>
+                        </span>
+                      </>
+                    }
+                  >
                     <Form.Control
-                      as="textarea"
-                      placeholder="Company Description"
-                      name='companyDescription'
-                      style={{ height: '100px', maxHeight: "450px" }}
-                      value={data?.companyDescription || ''}
+                      type="text"
+                      placeholder="Company Location"
+                      name="companyLocation"
+                      value={data?.companyLocation || ""}
                       onChange={handleDataChange}
-
                     />
                   </FloatingLabel>
                 </div>
-                {
-                  error &&
-                  <div className="flex pt-2">
-                    <span className='text-red-500'>{error}</span>
-                  </div>
-                }
-              </div>
-              <div className="flex flex-col justify-center items-center gap-2">
-                <Button variant="primary" type='submit' size='lg'>
-                  {
-                    companyId
-                      ? 'Update Company'
-                      : 'Add Company'
+                <FloatingLabel
+                  controlId="floatingCompanyWebsite"
+                  label={
+                    <>
+                      <span>
+                        Company Website <span className="text-red-500">*</span>
+                      </span>
+                    </>
                   }
-                </Button>
+                >
+                  <Form.Control
+                    type="link"
+                    placeholder="Company Website"
+                    name="companyWebsite"
+                    value={data?.companyWebsite || ""}
+                    onChange={handleDataChange}
+                  />
+                </FloatingLabel>
+                <FloatingLabel
+                  controlId="floatingSelectDifficulty"
+                  label={
+                    <>
+                      <span>
+                        Difficulty Level <span className="text-red-500">*</span>
+                      </span>
+                    </>
+                  }
+                >
+                  <Form.Select
+                    aria-label="Floating label select difficulty"
+                    className="cursor-pointer"
+                    name="companyDifficulty"
+                    value={data?.companyDifficulty || ""}
+                    onChange={handleDataChange}
+                  >
+                    <option disabled value="" className="text-gray-400">
+                      Enter Difficulty Level
+                    </option>
+                    <option value="Easy">Easy</option>
+                    <option value="Moderate">Moderate</option>
+                    <option value="Hard">Hard</option>
+                  </Form.Select>
+                </FloatingLabel>
+                <FloatingLabel
+                  controlId="floatingcompanyDescription"
+                  label={
+                    <>
+                      <span>
+                        Company Description{" "}
+                        <span className="text-red-500">*</span>
+                      </span>
+                    </>
+                  }
+                >
+                  <Form.Control
+                    as="textarea"
+                    placeholder="Company Description"
+                    name="companyDescription"
+                    style={{ height: "100px", maxHeight: "450px" }}
+                    value={data?.companyDescription || ""}
+                    onChange={handleDataChange}
+                  />
+                </FloatingLabel>
               </div>
-            </Form>
-          </>
-        )
-      }
-
+              {error && (
+                <div className="flex pt-2">
+                  <span className="text-red-500">{error}</span>
+                </div>
+              )}
+            </div>
+            <div className="flex flex-col justify-center items-center gap-2">
+              <Button variant="primary" type="submit" size="lg">
+                {companyId ? "Update Company" : "Add Company"}
+              </Button>
+            </div>
+          </Form>
+        </>
+      )}
 
       {/* ModalBox Component for Delete Confirmation */}
       <ModalBox
@@ -223,6 +244,6 @@ function AddCompany() {
         confirmAction={confirmSubmit}
       />
     </>
-  )
+  );
 }
-export default AddCompany
+export default AddCompany;

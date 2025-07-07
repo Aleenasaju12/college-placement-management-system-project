@@ -1,13 +1,13 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 function LandFooter() {
   const navigate = useNavigate();
 
   const loginLinks = [
-    { label: 'Login as TPO', path: '/tpo/login' },
-    { label: 'Login as Management', path: '/management/login' },
-    { label: 'Login as Super Admin', path: '/admin' },
+    { label: "Login as Placement Officer", path: "/tpo/login" },
+    { label: "Login as Management", path: "/management/login" },
+    { label: "Login as Super Admin", path: "/admin" },
   ];
 
   return (
@@ -28,8 +28,16 @@ function LandFooter() {
 
         {/* Footer Text */}
         <div className="text-center text-sm text-gray-600">
-          <p>© 2024 <span className="text-green-600 font-semibold">College Placement Management System</span>. All rights reserved.</p>
-          <p className="mt-1 text-xs text-gray-500">Developed by Final Year Students of Rizvi College of Engineering</p>
+          <p>
+            © 2025{" "}
+            <span className="text-green-600 font-semibold">
+              VJCET - College Placement Management System
+            </span>
+            . All rights reserved.
+          </p>
+          <p className="mt-1 text-xs text-gray-500">
+            Developed by Jyothirmayi and Friends
+          </p>
         </div>
       </div>
     </footer>

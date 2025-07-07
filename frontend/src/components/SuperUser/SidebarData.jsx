@@ -3,9 +3,17 @@ import { FaCheckSquare, FaUsers } from "react-icons/fa";
 import { AiFillHome } from "react-icons/ai";
 import { GrUserManager, GrUserWorker } from "react-icons/gr";
 import { FaListUl } from "react-icons/fa";
-import { RiArrowDownSFill, RiArrowUpSFill, RiPlayListAddLine } from "react-icons/ri";
+import {
+  RiArrowDownSFill,
+  RiArrowUpSFill,
+  RiPlayListAddLine,
+} from "react-icons/ri";
 import { PiStudentDuotone } from "react-icons/pi";
-import { FaClipboardCheck, FaIndustry, FaEnvelopeOpenText } from "react-icons/fa";
+import {
+  FaClipboardCheck,
+  FaIndustry,
+  FaEnvelopeOpenText,
+} from "react-icons/fa";
 import { LiaIndustrySolid } from "react-icons/lia";
 import { FaUserSecret } from "react-icons/fa";
 
@@ -13,7 +21,7 @@ export const SidebarData = [
   {
     title: "Dashboard",
     path: "/admin/dashboard",
-    icon: <AiFillHome />
+    icon: <AiFillHome />,
   },
   {
     title: "Management",
@@ -36,7 +44,7 @@ export const SidebarData = [
     ],
   },
   {
-    title: "TPO",
+    title: "Placement Officers",
     icon: <GrUserWorker />,
     iconClosed: <RiArrowDownSFill />,
     iconOpened: <RiArrowUpSFill />,

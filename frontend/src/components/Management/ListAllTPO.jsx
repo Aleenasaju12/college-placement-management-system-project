@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import Toast from '../Toast';
-import ModalBox from '../Modal';
-import AddUserTable from '../AddUserTable';
-import { BASE_URL } from '../../config/backend_url';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Toast from "../Toast";
+import ModalBox from "../Modal";
+import AddUserTable from "../AddUserTable";
+import { BASE_URL } from "../../config/backend_url";
 
 function AddTPO() {
-  document.title = 'CPMS | TPO Users';
+  document.title = "VJCET | TPO Users";
   // tpo users store here
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // useState for toast display
   const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState('');
+  const [toastMessage, setToastMessage] = useState("");
 
   // useState for Modal display
   const [showModal, setShowModal] = useState(false);
@@ -24,14 +24,14 @@ function AddTPO() {
       const response = await axios.get(`${BASE_URL}/management/tpo-users`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`, // Assuming token is stored in localStorage
-        }
+        },
       });
 
       if (response.data) {
         // console.log(response.data.tpoUsers)
         setUsers(response.data.tpoUsers);
       } else {
-        console.warn('Response does not contain tpoUsers:', response.data);
+        console.warn("Response does not contain tpoUsers:", response.data);
       }
     } catch (error) {
       console.error("Error fetching user details", error);
@@ -39,7 +39,6 @@ function AddTPO() {
       setLoading(false);
     }
   };
-
 
   useEffect(() => {
     fetchUserDetails();
@@ -50,24 +49,26 @@ function AddTPO() {
     first_name: "",
     email: "",
     number: "",
-    password: ""
+    password: "",
   });
 
-  const handleDataChange = (e) => setData({ ...data, [e.target.name]: e.target.value });
+  const handleDataChange = (e) =>
+    setData({ ...data, [e.target.name]: e.target.value });
 
   const handleDeleteUser = (email) => {
     setUserToDelete(email);
     setShowModal(true);
-  }
+  };
 
   const confirmDelete = async () => {
     try {
-      const response = await axios.post(`${BASE_URL}/management/deletetpo`,
+      const response = await axios.post(
+        `${BASE_URL}/management/deletetpo`,
         { email: userToDelete },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
-          }
+          },
         }
       );
       setShowModal(false);
@@ -79,7 +80,7 @@ function AddTPO() {
     } catch (error) {
       console.log("AddTPO => confirmDelete ==> ", error);
     }
-  }
+  };
 
   const closeModal = () => {
     setShowModal(false);
@@ -89,14 +90,11 @@ function AddTPO() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${BASE_URL}/management/addtpo`,
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          }
-        }
-      );
+      const response = await axios.post(`${BASE_URL}/management/addtpo`, data, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       if (response.data) {
         setToastMessage(response.data.msg);
         setShowToast(true);
@@ -105,13 +103,12 @@ function AddTPO() {
     } catch (error) {
       console.log("handleSubmit => AddTPO.jsx ==> ", error);
     }
-  }
-
+  };
 
   return (
     <>
       {/*  any message here  */}
-      < Toast
+      <Toast
         show={showToast}
         onClose={() => setShowToast(false)}
         message={toastMessage}
@@ -144,7 +141,6 @@ function AddTPO() {
         btn={"Delete"}
         confirmAction={confirmDelete}
       />
-
     </>
   );
 }

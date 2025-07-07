@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import Toast from '../Toast';
-import ModalBox from '../Modal';
-import AddUserTable from '../AddUserTable';
-import { BASE_URL } from '../../config/backend_url';
-
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Toast from "../Toast";
+import ModalBox from "../Modal";
+import AddUserTable from "../AddUserTable";
+import { BASE_URL } from "../../config/backend_url";
 
 function Management() {
-  document.title = 'CPMS | Management Users';
+  document.title = "VJCET | Management Users";
 
   // Management users store here
   const [users, setUsers] = useState([]);
@@ -15,7 +14,7 @@ function Management() {
 
   // useState for toast display
   const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState('');
+  const [toastMessage, setToastMessage] = useState("");
 
   // useState for Modal display
   const [showModal, setShowModal] = useState(false);
@@ -26,13 +25,16 @@ function Management() {
       const response = await axios.get(`${BASE_URL}/admin/management-users`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`, // Assuming token is stored in localStorage
-        }
+        },
       });
 
       if (response.data) {
         setUsers(response.data.managementUsers);
       } else {
-        console.warn('Response does not contain ManagementUsers:', response.data);
+        console.warn(
+          "Response does not contain ManagementUsers:",
+          response.data
+        );
       }
     } catch (error) {
       console.error("Error fetching user details", error);
@@ -50,24 +52,26 @@ function Management() {
     first_name: "",
     email: "",
     number: "",
-    password: ""
+    password: "",
   });
 
-  const handleDataChange = (e) => setData({ ...data, [e.target.name]: e.target.value });
+  const handleDataChange = (e) =>
+    setData({ ...data, [e.target.name]: e.target.value });
 
   const handleDeleteUser = (email) => {
     setUserToDelete(email);
     setShowModal(true);
-  }
+  };
 
   const confirmDelete = async (email) => {
     try {
-      const response = await axios.post(`${BASE_URL}/admin/management-delete-user`,
+      const response = await axios.post(
+        `${BASE_URL}/admin/management-delete-user`,
         { email: userToDelete },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
-          }
+          },
         }
       );
       setShowModal(false);
@@ -79,7 +83,7 @@ function Management() {
     } catch (error) {
       console.log("Management => confirmDelete ==> ", error);
     }
-  }
+  };
 
   const closeModal = () => {
     setShowModal(false);
@@ -89,12 +93,13 @@ function Management() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${BASE_URL}/admin/management-add-user`,
+      const response = await axios.post(
+        `${BASE_URL}/admin/management-add-user`,
         data,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
-          }
+          },
         }
       );
       if (response.data) {
@@ -105,13 +110,12 @@ function Management() {
     } catch (error) {
       console.log("handleSubmit => Mangement.jsx ==> ", error);
     }
-  }
-
+  };
 
   return (
     <>
       {/*  any message here  */}
-      < Toast
+      <Toast
         show={showToast}
         onClose={() => setShowToast(false)}
         message={toastMessage}
@@ -147,7 +151,7 @@ function Management() {
         confirmAction={confirmDelete}
       />
     </>
-  )
+  );
 }
 
-export default Management
+export default Management;

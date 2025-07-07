@@ -3,9 +3,17 @@
 import React from "react";
 import { FaListUl } from "react-icons/fa";
 import { AiFillHome } from "react-icons/ai";
-import { RiArrowDownSFill, RiArrowUpSFill, RiPlayListAddLine } from "react-icons/ri";
+import {
+  RiArrowDownSFill,
+  RiArrowUpSFill,
+  RiPlayListAddLine,
+} from "react-icons/ri";
 import { PiStudentDuotone } from "react-icons/pi";
-import { FaClipboardCheck, FaIndustry, FaEnvelopeOpenText } from "react-icons/fa";
+import {
+  FaClipboardCheck,
+  FaIndustry,
+  FaEnvelopeOpenText,
+} from "react-icons/fa";
 import { GrUserWorker } from "react-icons/gr";
 import { LiaIndustrySolid } from "react-icons/lia";
 
@@ -13,7 +21,7 @@ export const SidebarData = [
   {
     title: "Dashboard",
     path: "/management/dashboard",
-    icon: <AiFillHome />
+    icon: <AiFillHome />,
   },
   {
     title: "Students",
@@ -36,7 +44,7 @@ export const SidebarData = [
     ],
   },
   {
-    title: "TPO",
+    title: "Placement Officers",
     icon: <GrUserWorker />,
     iconClosed: <RiArrowDownSFill />,
     iconOpened: <RiArrowUpSFill />,

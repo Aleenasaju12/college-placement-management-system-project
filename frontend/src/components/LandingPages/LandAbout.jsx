@@ -1,8 +1,8 @@
-import React from 'react';
-import Student from '../../assets/student.jpg';
-import TPO from '../../assets/tpo.jpg';
-import Management from '../../assets/management.jpg';
-import Admin from '../../assets/admin.jpg';
+import React from "react";
+import Student from "../../assets/student.jpg";
+import TPO from "../../assets/tpo.jpg";
+import Management from "../../assets/management.jpg";
+import Admin from "../../assets/admin.jpg";
 
 function LandAbout() {
   const roles = [
@@ -13,10 +13,10 @@ function LandAbout() {
         "Students can register, explore job opportunities, apply for jobs, and track application status with a personalized dashboard.",
     },
     {
-      title: "TPO (Training & Placement Officer)",
+      title: "Placement Officer",
       image: TPO,
       description:
-        "TPOs manage company data, job postings, application reviews, and generate insightful reports for placement tracking.",
+        "Companies manage company data, job postings, application reviews, and generate insightful reports for placement tracking.",
     },
     {
       title: "Management",
@@ -38,9 +38,12 @@ function LandAbout() {
       className="bg-gradient-to-tr from-pink-100 via-purple-100 to-pink-100 py-10 scroll-mt-24"
     >
       <div className="text-center mb-12">
-        <h2 className="text-4xl md:text-5xl font-bold mb-3 playfair">About CPMS</h2>
+        <h2 className="text-4xl md:text-5xl font-bold mb-3 playfair">
+          About VJCET
+        </h2>
         <p className="text-md md:text-lg max-w-3xl mx-auto text-gray-700 px-3">
-          Developed by final year students of Rizvi College of Engineering, CPMS (College Placement Management System) is a powerful web-based platform to streamline and manage campus placements efficiently.
+          VJCET - College Placement Management System is a powerful web-based
+          platform to streamline and manage campus placements efficiently.
         </p>
       </div>
 
@@ -55,8 +58,12 @@ function LandAbout() {
               alt={role.title}
               className="w-48 h-48 object-cover rounded-full border-4 border-green-300 shadow-md"
             />
-            <h3 className="text-xl md:text-2xl font-semibold mt-4 mb-2 text-green-700 text-center">{role.title}</h3>
-            <p className="text-gray-600 text-sm text-center">{role.description}</p>
+            <h3 className="text-xl md:text-2xl font-semibold mt-4 mb-2 text-green-700 text-center">
+              {role.title}
+            </h3>
+            <p className="text-gray-600 text-sm text-center">
+              {role.description}
+            </p>
           </div>
         ))}
       </div>

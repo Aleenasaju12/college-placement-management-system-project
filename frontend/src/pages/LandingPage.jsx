@@ -1,29 +1,31 @@
-import React, { useEffect, useState } from 'react';
-import LandingNavbar from '../components/LandingPages/LandNavbar';
-import LandingHeroPage from '../components/LandingPages/LandHeroPage';
-import LandingAbout from '../components/LandingPages/LandAbout';
-import LandFooter from '../components/LandingPages/LandFooter';
-import Toast from '../components/Toast';
-import { useLocation, useNavigate } from 'react-router-dom';
-
+import React, { useEffect, useState } from "react";
+import LandingNavbar from "../components/LandingPages/LandNavbar";
+import LandingHeroPage from "../components/LandingPages/LandHeroPage";
+import LandingAbout from "../components/LandingPages/LandAbout";
+import LandFooter from "../components/LandingPages/LandFooter";
+import Toast from "../components/Toast";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function LandingPage() {
-  document.title = 'CPMS';
+  document.title = "VJCET";
   const location = useLocation();
   const navigate = useNavigate();
 
   // useState for toast display
   const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState('');
+  const [toastMessage, setToastMessage] = useState("");
 
   // if user came from any userContext page then this toast appears
-  const { showToastPass, toastMessagePass } = location.state || { showToastPass: false, toastMessagePass: '' };
+  const { showToastPass, toastMessagePass } = location.state || {
+    showToastPass: false,
+    toastMessagePass: "",
+  };
   useEffect(() => {
     if (showToastPass) {
       setToastMessage(toastMessagePass);
       setShowToast(showToastPass);
       // Clear the state after the toast is shown
-      navigate('.', { replace: true, state: {} });
+      navigate(".", { replace: true, state: {} });
     }
   }, []);
 
@@ -44,9 +46,8 @@ function LandingPage() {
         <LandingAbout />
         <LandFooter />
       </div>
-
     </>
-  )
+  );
 }
 
-export default LandingPage
+export default LandingPage;
